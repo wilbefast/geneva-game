@@ -5,10 +5,12 @@
 	<app main="Main" path="Export" file="Geneva" />
 	
 	<source path="Source" />
+	<source path="Source/utils" />
 	<source path="Source/scenes" />
 	<source path="Source/ingame" />
 
 	<haxelib name="openfl" />
+	<haxelib name="actuate" />
 	
 	<assets path="Assets" rename="assets" />
 	<icon path="Assets/title.png" />

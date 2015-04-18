@@ -1,7 +1,8 @@
 import openfl.display.Sprite;
 import openfl.Lib;
+import openfl.events.Event;
 import openfl.events.KeyboardEvent;
-
+import haxe.Timer;
 
 class SceneManager extends Sprite
 {
@@ -13,20 +14,34 @@ class SceneManager extends Sprite
 
 	private static var _instance : SceneManager;
 
+	private var _lastTick : Float = 0.0;
+
 	private function new()
 	{
 		super();
 
+		// Key pressed
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, 
 		function(e : KeyboardEvent) {
 			if(_current != null)
 				_current.onKeyPress(e.keyCode);
 		});
 
+		// Key released
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, 
 		function(e : KeyboardEvent) {
 			if(_current != null)
 				_current.onKeyRelease(e.keyCode);
+		});
+
+		// Update
+		_lastTick = Timer.stamp();
+		Lib.current.stage.addEventListener(Event.ENTER_FRAME,
+		function(e : Event) {
+			var thisTick = Timer.stamp();
+			if(_current != null)
+				_current.onUpdate(thisTick - _lastTick);
+			_lastTick = thisTick;
 		});
 	}
 
