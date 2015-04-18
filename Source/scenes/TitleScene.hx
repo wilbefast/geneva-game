@@ -1,55 +1,60 @@
 package ;
 
 import openfl.display.Sprite;
+import openfl.display.Bitmap;
+import openfl.Assets;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.Lib;
+import openfl.ui.Keyboard;
+import openfl.system.System;
 
-
-class TitleScene extends Sprite implements Scene 
+class TitleScene extends Scene 
 {
 	public function new()
 	{
 		super();
 
-		//addChild();
-/*
+		// title
+		var title = new Bitmap(Assets.getBitmapData("assets/title.png"));
+		Useful.position(title, 0.5, 0.5);
 
-		addEventListener(Event.ENTER_FRAME, function(e) {
-
-		});
-
-		stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e : KeyboardEvent) {
-			trace(e.keyCode);
-		});*/
+		addChild(title);
 	}
 
 
 	// --------------------------------------------------------------------------
-	// IMPLEMENTS SCENE
+	// OVERRIDES SCENE
 	// --------------------------------------------------------------------------
 
-	public function onEnter(source : Scene) : Void
+	public override function onEnter(source : Scene) : Void
 	{
 
 	}
 
-	public function onExit(destination : Scene) : Void
+	public override function onExit(destination : Scene) : Void
 	{
 
 	}
 
-	public function onUpdate(dt : Float) : Void
+	public override function onUpdate(dt : Float) : Void
 	{
 
 	}
 
-	public function onKeyPress() : Void
+	public override function onKeyPress(keyCode : UInt) : Void
 	{
+		switch(keyCode)
+		{
+			case Keyboard.ENTER:
+				SceneManager.get().goto("InGame");
 
+			case Keyboard.ESCAPE:
+				System.exit(0);
+		}
 	}
 
-	public function onKeyRelease() : Void
+	public override function onKeyRelease(keyCode : UInt) : Void
 	{
 
 	}

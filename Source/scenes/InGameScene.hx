@@ -3,8 +3,9 @@ package ;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.Lib;
+import openfl.ui.Keyboard;
 
-class FailScene extends Scene
+class InGameScene extends Scene
 {
 	// --------------------------------------------------------------------------
 	// OVERRIDES SCENE
@@ -27,7 +28,11 @@ class FailScene extends Scene
 
 	public override function onKeyPress(keyCode : UInt) : Void
 	{
-
+		switch(keyCode)
+		{
+			case Keyboard.ESCAPE:
+				SceneManager.get().goto("Title");
+		}
 	}
 
 	public override function onKeyRelease(keyCode : UInt) : Void

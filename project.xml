@@ -6,11 +6,12 @@
 	
 	<source path="Source" />
 	<source path="Source/scenes" />
+	<source path="Source/ingame" />
 
 	<haxelib name="openfl" />
 	
-	<assets path="Assets" rename="assets" exclude="openfl.svg" />
-	<icon path="Assets/openfl.svg" />
+	<assets path="Assets" rename="assets" />
+	<icon path="Assets/title.png" />
 	
 	<window background="#333333" fps="60" />
 	<window width="640" height="480" unless="mobile" />

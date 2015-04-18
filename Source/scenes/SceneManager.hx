@@ -3,7 +3,7 @@ import openfl.Lib;
 import openfl.events.KeyboardEvent;
 
 
-class SceneManager
+class SceneManager extends Sprite
 {
 	// --------------------------------------------------------------------------
 	// SINGLETON
@@ -15,16 +15,18 @@ class SceneManager
 
 	private function new()
 	{
+		super();
+
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, 
 		function(e : KeyboardEvent) {
 			if(_current != null)
-				_current.onKeyPress();
+				_current.onKeyPress(e.keyCode);
 		});
 
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, 
 		function(e : KeyboardEvent) {
 			if(_current != null)
-				_current.onKeyPress();
+				_current.onKeyRelease(e.keyCode);
 		});
 	}
 
@@ -50,9 +52,12 @@ class SceneManager
 
 	private function _goto(next : Scene)
 	{
+		addChild(next);
 		if(_current != null)
 			_current.onExit(next);
 		next.onEnter(_current);
+		if(_current != null)
+			removeChild(_current);
 		_current = next;
 	}
 
