@@ -5,21 +5,45 @@ class Tile extends Sprite
 	private var gridX(default, null) : Int;
 	private var gridY(default, null) : Int;
 
+	private var _type : TileType;
+
 	public var north : Tile;
 	public var south : Tile;
 	public var east : Tile;
 	public var west : Tile;
 
-	public function new(gridX : Int, gridY : Int)
+	public function new(gridX : Int, gridY : Int, type : TileType)
 	{
 		super();
 
 		this.gridX = gridX;
 		this.gridY = gridY;
 
-		graphics.beginFill(0xffffff);
-		graphics.drawRect(0, 0, 1, 1);
-		graphics.endFill();
+		_type = type;
+		switch(_type)
+		{
+			case Floor:
+
+			case Wall:
+				graphics.beginFill(0xffffff);
+				graphics.drawRect(-16, -16, 32, 32);
+				graphics.endFill();
+
+			case Hole:
+				graphics.beginFill(0x808080);
+				graphics.drawRect(-10, -10, 20, 20);
+				graphics.endFill();
+
+			case Exit:
+				graphics.beginFill(0xffff00);
+				graphics.drawRect(-10, -10, 20, 20);
+				graphics.endFill();			
+
+			case _:
+				throw "Invalid Tile type " + _type;
+		}
+
+
 	}
 
 	public function getNeighbour(dx : Int, dy : Int)
@@ -34,5 +58,21 @@ class Tile extends Sprite
 			return east;
 
 		throw "Invalid parameters 0, 0 passed to Tile::getNeighbour";
+	}
+
+	public function isWalkable()
+	{
+		return switch(_type)
+		{
+			case Wall | Hole: false;
+			case Floor | Exit: true;
+			case _:
+				throw "Invalid Tile type " + _type;
+		}
+	}
+
+	public function getType() : TileType
+	{
+		return _type;
 	}
 }

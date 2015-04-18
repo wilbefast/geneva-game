@@ -1,4 +1,6 @@
 import openfl.display.Sprite;
+import openfl.display.BitmapData;
+import openfl.Assets;
 
 class Level extends Sprite
 {
@@ -9,13 +11,33 @@ class Level extends Sprite
 
 	private var _avatar : Avatar;
 
-	public function new(width : Int, height : Int)
+	private static function _getColourType(colour : UInt) : TileType
+	{
+		return switch(colour)
+		{
+			case 0x000000: Wall;
+			case 0xffffff: Floor;
+			case 0x00ff00: Cannister;
+			case 0x0000ff: PlayerStart;
+			case 0x808080: Hole;
+			case 0xffff00: Exit;
+			default:
+				throw "Invalid colour " + colour +  " in level image";
+		}
+	}
+
+	public function new(levelNumber : Int)
 	{
 		super();
 
+		// load image
+		var bitmap = Assets.getBitmapData ("assets/level01.png");
+
 		// Dimensions
-		_width = width;
-		_height = height;
+		_width = bitmap.width;
+		_height = bitmap.height;
+
+		// Objects to spawn
 
 		// Tiles
 		_tiles = new Array<Tile>();
@@ -23,12 +45,40 @@ class Level extends Sprite
 		{
 			for(gridY in 0 ... _height)
 			{
-				var t = new Tile(gridX, gridY);
-				_tiles[gridY*_width + gridX] = t;
+				var type = _getColourType(bitmap.getPixel(gridX, gridY));
+				var i = gridY*_width + gridX;
+
+				// Tile
+				var t = switch(type)
+				{
+					case PlayerStart | Cannister:
+						 new Tile(gridX, gridY, Floor);
+					case Floor | Hole | Wall | Exit:
+						new Tile(gridX, gridY, type);
+				}
+				_tiles[i] = t;
 				addChild(t);
 				Position.relative(t, 
 					0.1 + 0.8 * gridX / (_width - 1.0), 
 					0.1 + 0.8 * gridY / (_height - 1.0));
+
+				// Contained object
+				switch(type)
+				{
+					case PlayerStart:
+						_avatar = new Avatar(t);
+						addChild(_avatar);
+						_avatar.x = t.x;
+						_avatar.y = t.y;
+
+					case Cannister:
+						// TODO
+
+					case Floor | Hole | Wall | Exit:
+						// do nothing
+				}
+
+
 			}
 		}
 
@@ -49,13 +99,6 @@ class Level extends Sprite
 					t.east = getTile(gridX + 1, gridY);
 			}
 		}
-
-		// Avatar
-		var centre = getTile(Math.floor(_width / 2), Math.floor(_width / 2));
-		_avatar = new Avatar(centre);
-		addChild(_avatar);
-		_avatar.x = centre.x;
-		_avatar.y = centre.y;
 	}
 
 	public function getAvatar()

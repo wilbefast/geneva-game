@@ -17,7 +17,7 @@ class InGameScene extends Scene
 
 	public override function onEnter(source : Scene) : Void
 	{
-		_level = new Level(11, 11);
+		_level = new Level(0);
 		_avatar = _level.getAvatar();
 		addChild(_level);
 	}

@@ -27,16 +27,27 @@ class Avatar extends Sprite
 		if(isMoving())
 			return false;
 
-		_desiredTile = newTile;
+		if(!newTile.isWalkable())
+			return false;
 
+		_desiredTile = newTile;
 		Actuate.tween (this, 0.5, { x: newTile.x, y: newTile.y }, false)
 		.ease (Quad.easeOut)
 		.onComplete (function() {
 			_tile = _desiredTile;
-			_desiredTile = null;	
+			_onEnter(_tile);
+			_desiredTile = null;
 		});
 		
 		return true;
+	}
+
+	private function _onEnter(t : Tile)
+	{
+		switch(t.getType())
+		{
+			case _:
+		}
 	}
 
 	public function getTile() : Tile
