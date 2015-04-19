@@ -63,8 +63,11 @@ class InGameScene extends Scene
 		function _cycleRain()
 		{
 			Actuate.timer(0.1).onComplete(function() {
-				_rain_i = (_rain_i + 1) % 3;
-				_rain.bitmapData = rain_source[_rain_i];
+				if(_level.isStepping())
+				{
+					_rain_i = (_rain_i + 1) % 3;
+					_rain.bitmapData = rain_source[_rain_i];
+				}
 				_cycleRain();
 			});
 		}

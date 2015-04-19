@@ -203,6 +203,11 @@ class Level extends Sprite
 	private var _step_queue : Int = 0;
 	private var _step_in_progress : Bool = false;
 
+	public function isStepping() : Bool
+	{
+		return (_step_in_progress || (_step_queue > 0));
+	}
+
 	public function update(dt : Float)
 	{
 		if(_step_in_progress)
@@ -211,13 +216,19 @@ class Level extends Sprite
 		}
 		else if(_step_queue == 0)
 		{
-			// Move avatar ?
-			var d = Input.getDirection();
-			var dx : Int = d.x < 0 ? Math.floor(d.x) : Math.ceil(d.x);
-			var dy : Int = d.y < 0 ? Math.floor(d.y) : Math.ceil(d.y);
-			if(dx != 0 || dy != 0)
-				_step_queue = _avatar.tryMove(
-					_avatar.getTile().getNeighbour(dx, dy));
+			// Dead avatar ?
+			if(_avatar.isDead())
+				_step_queue++;
+			else
+			{
+				// Move avatar ?
+				var d = Input.getDirection();
+				var dx : Int = d.x < 0 ? Math.floor(d.x) : Math.ceil(d.x);
+				var dy : Int = d.y < 0 ? Math.floor(d.y) : Math.ceil(d.y);
+				if(dx != 0 || dy != 0)
+					_step_queue = _avatar.tryMove(
+						_avatar.getTile().getNeighbour(dx, dy));
+			}
 		}
 		else
 		{

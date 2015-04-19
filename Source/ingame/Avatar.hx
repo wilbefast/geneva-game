@@ -41,8 +41,16 @@ class Avatar extends GameObject
 		centre.addChild(_img);
 	}
 
+	public function isDead()
+	{
+		return (_life <= 0);
+	}
+
 	public function tryMove(newTile : Tile) : Int
 	{
+		if(_life <= 0)
+			return 0;
+
 		if(newTile == null)
 			return 0;
 
@@ -80,8 +88,10 @@ class Avatar extends GameObject
 		});
 
 		// Bounce
+		var _base_y = _img.y;
 		Actuate.update(function(t : Float) {
-			scaleY = 0.9 + 0.1*Math.cos(4 * t * Math.PI);
+			scaleY = 0.9 + 0.1*Math.cos(8 * t * Math.PI);
+			_img.y = _base_y + 2*Math.sin(8 * t * Math.PI);
 		}, delay, [0], [1]);
 
 		// Report cost
@@ -97,7 +107,12 @@ class Avatar extends GameObject
 		{
 			_life -= 2*g;
 			if(_life <= 0.0)
-				SceneManager.get().onEvent("lose");
+				Actuate.tween(this, 1.0,
+					{ scaleX : 0, scaleY : 0}, false)
+				.onComplete(function() {
+					SceneManager.get().onEvent("lose");
+				});
+				
 		}
 
 		switch(t.getType())

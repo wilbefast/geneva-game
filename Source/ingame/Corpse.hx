@@ -10,8 +10,12 @@ class Corpse extends GameObject
 		super(tile);
 
 		var img = new Bitmap(Assets.getBitmapData(
-			"assets/corpse.png"),
+			"assets/corpse" + Std.string(Std.random(2) + 1) + ".png"),
 			PixelSnapping.ALWAYS);
+		if(Std.random(2) == 0)
+			img.scaleX = -1;
+		else
+			img.scaleX = 1;
 		img.x = -img.width*0.5;
 		img.y = -img.height*0.5;
 		addChild(img);
