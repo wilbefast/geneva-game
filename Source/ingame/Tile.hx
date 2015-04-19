@@ -56,6 +56,14 @@ class Tile extends Sprite
 				img.y = -img.height*0.5;
 				addChild(img);
 
+			case Flooded:
+				var img = new Bitmap(Assets.getBitmapData(
+					"assets/flooded.png"),
+					PixelSnapping.ALWAYS);
+				img.x = -img.width*0.5;
+				img.y = -img.height*0.5;
+				addChild(img);
+
 			case Wall:
 				// Do nothing
 
@@ -143,7 +151,7 @@ class Tile extends Sprite
 		return switch(_type)
 		{
 			case Wall | Hole: false;
-			case Floor | Exit : true;
+			case Floor | Exit | Flooded : true;
 			case _:
 				throw "Invalid Tile type " + _type;
 		}

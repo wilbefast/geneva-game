@@ -39,6 +39,7 @@ class Level extends Sprite
 			case 0x0000ff: PlayerStart;
 			case 0x808080: Hole;
 			case 0xffff00: Exit;
+			case 0x00ffff: Flooded;
 			case 0xff8080: WoundedStart;
 			case 0x808000: BoardsStart;
 			default:

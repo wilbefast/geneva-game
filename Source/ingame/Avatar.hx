@@ -17,21 +17,28 @@ class Avatar extends GameObject
 	private var _img_s : BitmapData;
 	private var _img_e : BitmapData;
 	private var _img_w : BitmapData;
+	private var _img_n_flooded : BitmapData;
+	private var _img_s_flooded : BitmapData;
+	private var _img_e_flooded : BitmapData;
+	private var _img_w_flooded : BitmapData;
+
 
 	public function new(tile : Tile)
 	{
 		super(tile);
 
-		/*
-		graphics.beginFill(0xff0000);
-		graphics.drawRect(-10, -10, 20, 20);
-		graphics.endFill();
-		*/
-
 		_img_n = Assets.getBitmapData("assets/avatar_n.png");
 		_img_s = Assets.getBitmapData("assets/avatar_s.png");
 		_img_e = Assets.getBitmapData("assets/avatar_e.png");
 		_img_w = Assets.getBitmapData("assets/avatar_w.png");
+		_img_n_flooded = Assets.getBitmapData(
+			"assets/avatar_n_flooded.png");
+		_img_s_flooded = Assets.getBitmapData(
+			"assets/avatar_s_flooded.png");
+		_img_e_flooded = Assets.getBitmapData(
+			"assets/avatar_e_flooded.png");
+		_img_w_flooded = Assets.getBitmapData(
+			"assets/avatar_w_flooded.png");
 
 		_img = new Bitmap(_img_s, PixelSnapping.ALWAYS);
 		var centre = new Sprite();
@@ -58,13 +65,33 @@ class Avatar extends GameObject
 			return 0;
 
 		if(newTile == _tile.getNorth())
-			_img.bitmapData = _img_n;
+		{	
+			if(newTile.getType() == Flooded)
+				_img.bitmapData = _img_n_flooded;
+			else	
+				_img.bitmapData = _img_n;
+		}
 		else if(newTile == _tile.getSouth())
-			_img.bitmapData = _img_s;
+		{	
+			if(newTile.getType() == Flooded)
+				_img.bitmapData = _img_s_flooded;
+			else	
+				_img.bitmapData = _img_s;
+		}
 		else if(newTile == _tile.getEast())
-			_img.bitmapData = _img_e;
+		{	
+			if(newTile.getType() == Flooded)
+				_img.bitmapData = _img_e_flooded;
+			else	
+				_img.bitmapData = _img_e;
+		}
 		else if(newTile == _tile.getWest())
-			_img.bitmapData = _img_w;
+		{	
+			if(newTile.getType() == Flooded)
+				_img.bitmapData = _img_w_flooded;
+			else	
+				_img.bitmapData = _img_w;
+		}
 
 		if(!newTile.isWalkable())
 			return 1;
