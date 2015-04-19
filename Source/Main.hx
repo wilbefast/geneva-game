@@ -30,11 +30,12 @@ class Main extends Sprite
 		addChild(scenes);
 
 		// Add the vignette
+/*
 		var vignette = new Bitmap(
 			Assets.getBitmapData("assets/vignette.png"),
 			PixelSnapping.ALWAYS);
 		addChild(vignette);
-
+*/
 		// Loop the rain sound
 		Audio.get().loopMusic("rain", 0.5);
 	

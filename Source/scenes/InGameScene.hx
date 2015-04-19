@@ -40,7 +40,8 @@ class InGameScene extends Scene
 		_level.scaleY = scale;
 */
 		// Loop the game music
-		Audio.get().playMusic("music");
+		if(source != this)
+			Audio.get().playMusic("music");
 
 /*
 		// Add the vignette to the level
@@ -63,12 +64,15 @@ class InGameScene extends Scene
 		function _cycleRain()
 		{
 			Actuate.timer(0.1).onComplete(function() {
-				if(_level.isStepping())
+				if(_level != null)
 				{
-					_rain_i = (_rain_i + 1) % 3;
-					_rain.bitmapData = rain_source[_rain_i];
+					if(_level.isStepping())
+					{
+						_rain_i = (_rain_i + 1) % 3;
+						_rain.bitmapData = rain_source[_rain_i];
+					}
+					_cycleRain();
 				}
-				_cycleRain();
 			});
 		}
 		_cycleRain();
@@ -105,7 +109,7 @@ class InGameScene extends Scene
 
 #if debug
 		if(_capture_gif)
-			Screenshot.capture(_level);
+			Screenshot.capture(this);
 #end
 
 	}
