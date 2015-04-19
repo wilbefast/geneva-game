@@ -37,6 +37,14 @@ class InGameScene extends Scene
 		{
 			case Keyboard.ESCAPE:
 				SceneManager.get().goto("Title");
+
+#if debug
+			case Keyboard.ENTER:
+				onEvent("win");
+
+			case Keyboard.BACKSPACE:
+				onEvent("lose");
+#end
 		}
 	}
 

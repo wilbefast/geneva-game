@@ -47,6 +47,11 @@ class Tile extends Sprite
 				graphics.drawRect(-10, -10, 20, 20);
 				graphics.endFill();		
 
+			case Corpse:
+				graphics.beginFill(0xff0000);
+				graphics.drawRect(-5, -5, 10, 10);
+				graphics.endFill();	
+
 			case _:
 				throw "Invalid Tile type " + _type;
 		}
@@ -113,7 +118,7 @@ class Tile extends Sprite
 		return switch(_type)
 		{
 			case Wall | Hole: false;
-			case Floor | Exit: true;
+			case Floor | Exit | Corpse: true;
 			case _:
 				throw "Invalid Tile type " + _type;
 		}

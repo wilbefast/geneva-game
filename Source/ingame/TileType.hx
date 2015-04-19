@@ -3,6 +3,7 @@
 	  Floor;
 	  Wall;
 	  Hole;
+	  Corpse;
 	  PlayerStart;
 	  CannisterStart;
 	  Exit;

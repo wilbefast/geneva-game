@@ -23,6 +23,7 @@ class Level extends Sprite
 		{
 			case 0x000000: Wall;
 			case 0xffffff: Floor;
+			case 0xff0000: Corpse;
 			case 0x00ff00: CannisterStart;
 			case 0x0000ff: PlayerStart;
 			case 0x808080: Hole;
@@ -87,7 +88,7 @@ class Level extends Sprite
 				{
 					case PlayerStart | CannisterStart:
 						 new Tile(gridX, gridY, Floor, gasSprite);
-					case Floor | Hole | Wall | Exit:
+					case Floor | Hole | Wall | Exit | Corpse:
 						new Tile(gridX, gridY, type, gasSprite);
 				}
 				_tiles[i] = t;
@@ -118,11 +119,9 @@ class Level extends Sprite
 						c.x = t.x;
 						c.y = t.y;
 
-					case Floor | Hole | Wall | Exit:
+					case Floor | Hole | Wall | Exit | Corpse:
 						// do nothing
 				}
-
-
 			}
 		}
 
@@ -148,6 +147,10 @@ class Level extends Sprite
 				_tiles[gridY*_width + gridX].setNeighbours(n, s, e, w);
 			}
 		}
+
+		// There should be an avatar
+		if(_avatar == null)
+			throw "Level file contains no avatar start position";
 	}
 
 	public function getTile(gridX : Int, gridY : Int) : Tile
