@@ -4,9 +4,13 @@ import openfl.display.Sprite;
 import openfl.display.Bitmap;
 import openfl.Assets;
 import motion.Actuate;
+import openfl.media.Sound;
+import openfl.events.Event;
 
 class Main extends Sprite 
 {
+	public static var music : Sound;
+
 	public function new () 
 	{
 		super ();
@@ -39,13 +43,9 @@ class Main extends Sprite
 		}
 		_cycleRain();
 
-
-		rain.bitmapData = rain_source[1];
-
 		// Add the vignette
 		var vignette = new Bitmap(
 			Assets.getBitmapData("assets/vignette.png"));
 		addChild(vignette);
-
 	}
 }
