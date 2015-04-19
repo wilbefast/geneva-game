@@ -6,6 +6,7 @@ import openfl.Lib;
 import openfl.ui.Keyboard;
 import openfl.Assets;
 import openfl.display.Bitmap;
+import openfl.display.PixelSnapping;
 import openfl.Assets;
 import motion.Actuate;
 
@@ -14,41 +15,68 @@ class InGameScene extends Scene
 	private var _level : Level;
 	private var _levelNumber : Int = 0;
 
+	private var _rain : Bitmap;
+
 	// --------------------------------------------------------------------------
 	// OVERRIDES SCENE
 	// --------------------------------------------------------------------------
 
 	public override function onEnter(source : Scene) : Void
 	{
-		if(source != this)
-		{
-			// Loop the game music
-			Audio.get().playMusic("music");
-
-			// Add the rain
-			var rain_source = [ 
-				Assets.getBitmapData("assets/rain1.png"),
-				Assets.getBitmapData("assets/rain2.png"),
-				Assets.getBitmapData("assets/rain3.png")];
-			var rain = new Bitmap(rain_source[0]);
-			addChild(rain);
-			var _rain_i = 0;
-			function _cycleRain()
-			{
-				Actuate.timer(0.1).onComplete(function() {
-					_rain_i = (_rain_i + 1) % 3;
-					rain.bitmapData = rain_source[_rain_i];
-					_cycleRain();
-				});
-			}
-			_cycleRain();
-		}
+		// Add background
+		var background = new Bitmap(
+			Assets.getBitmapData("assets/background.png"),
+			PixelSnapping.ALWAYS);
+		addChild(background);
 
 		// Load level
 		_level = new Level(_levelNumber);
 		addChild(_level);
+		/*
+		var scale = Math.min(
+			Lib.current.stage.width / _level.width,
+			Lib.current.stage.height / _level.height);
+		_level.scaleX = scale;
+		_level.scaleY = scale;
+*/
+		// Loop the game music
+		Audio.get().playMusic("music");
+
+/*
+		// Add the vignette to the level
+		var vignette = new Bitmap(
+			Assets.getBitmapData("assets/vignette.png"),
+			PixelSnapping.ALWAYS);
+		vignette.scaleX = _level.width/vignette.width;
+		vignette.scaleY = _level.height/vignette.height;
+		addChild(vignette);
+*/
+
+		// Add the rain
+		var rain_source = [ 
+			Assets.getBitmapData("assets/rain1.png"),
+			Assets.getBitmapData("assets/rain2.png"),
+			Assets.getBitmapData("assets/rain3.png")];
+		var _rain = new Bitmap(rain_source[0], PixelSnapping.ALWAYS);
+		addChild(_rain);
+		var _rain_i = 0;
+		function _cycleRain()
+		{
+			Actuate.timer(0.1).onComplete(function() {
+				_rain_i = (_rain_i + 1) % 3;
+				_rain.bitmapData = rain_source[_rain_i];
+				_cycleRain();
+			});
+		}
+		_cycleRain();
+
+		// Position level
 		_level.x = (width - _level.width)*0.5;
 		_level.y = (height - _level.height)*0.5;
+/*
+		vignette.x = _level.x - 16;
+		vignette.y = _level.y - 24;
+*/
 	}
 
 	public override function onExit(destination : Scene) : Void
@@ -56,6 +84,9 @@ class InGameScene extends Scene
 		if(destination != this)
 			// Stop the game music
 			Audio.get().stopMusic("music");
+
+		removeChild(_rain);
+		_rain = null;
 
 		removeChild(_level);
 		_level = null;

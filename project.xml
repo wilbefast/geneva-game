@@ -17,7 +17,7 @@
 
 	<certificate path="/home/william/dev/rsa/william.keystore" if="android" />
 	
-	<window background="#49342b" fps="60" />
+	<window background="#000000" fps="60" />
 	<window width="640" height="480" unless="mobile" />
 	<window resizable="false" />
 

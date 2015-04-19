@@ -1,5 +1,6 @@
 import openfl.display.Sprite;
 import openfl.display.Bitmap;
+import openfl.display.PixelSnapping;
 import openfl.Assets;
 
 class Tile extends Sprite
@@ -36,17 +37,13 @@ class Tile extends Sprite
 		{
 			case Floor:
 				var img = new Bitmap(Assets.getBitmapData(
-					"assets/mud" + Std.string(Std.random(6) + 1) + ".png"));
+					"assets/mud" + Std.string(Std.random(6) + 1) + ".png"),
+					PixelSnapping.ALWAYS);
 				img.x = -img.width*0.5;
-				img.y = -img.height*0.75;
+				img.y = -img.height*0.5;
 				addChild(img);
 
 			case Wall:
-				var img = new Bitmap(Assets.getBitmapData(
-					"assets/light_mud" + Std.string(Std.random(6) + 1) + ".png"));
-				img.x = -img.width*0.5;
-				img.y = -img.height*0.75;
-				addChild(img);
 			/*
 				graphics.beginFill(0xffffff);
 				graphics.drawRect(-16, -16, 32, 32);
@@ -54,9 +51,9 @@ class Tile extends Sprite
 			*/
 			case Hole:
 				var img = new Bitmap(Assets.getBitmapData(
-					"assets/hole.png"));
+					"assets/hole.png"), PixelSnapping.ALWAYS);
 				img.x = -img.width*0.5;
-				img.y = -img.height*0.75;
+				img.y = -img.height*0.5;
 				addChild(img);
 			/*
 				graphics.beginFill(0x808080);
@@ -114,6 +111,10 @@ class Tile extends Sprite
 	// QUERY
 	// --------------------------------------------------------------------------
 
+	public function getNorth() { return _north; } 
+	public function getSouth() { return _south; } 
+	public function getEast() { return _east; } 
+	public function getWest() { return _west; } 
 
 	public function getNeighbour(dx : Int, dy : Int)
 	{

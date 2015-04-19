@@ -2,6 +2,7 @@ package ;
 
 import openfl.display.Sprite;
 import openfl.display.Bitmap;
+import openfl.display.PixelSnapping;
 import openfl.Assets;
 import motion.Actuate;
 import openfl.media.Sound;
@@ -30,7 +31,8 @@ class Main extends Sprite
 
 		// Add the vignette
 		var vignette = new Bitmap(
-			Assets.getBitmapData("assets/vignette.png"));
+			Assets.getBitmapData("assets/vignette.png"),
+			PixelSnapping.ALWAYS);
 		addChild(vignette);
 
 		// Loop the rain sound
