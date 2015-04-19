@@ -29,8 +29,10 @@ class Tile extends Sprite
 
 		_gasSprite = gasSprite;
 
+
+		// Graphics depending on tile type
 		_type = type;
-		switch(_type)
+		switch(type)
 		{
 			case Floor:
 				var img = new Bitmap(Assets.getBitmapData(
@@ -65,17 +67,6 @@ class Tile extends Sprite
 				graphics.beginFill(0xffff00);
 				graphics.drawRect(-10, -10, 20, 20);
 				graphics.endFill();		
-
-			case Corpse:
-				var img = new Bitmap(Assets.getBitmapData(
-					"assets/mud" + Std.string(Std.random(6) + 1) + ".png"));
-				img.x = -img.width*0.5;
-				img.y = -img.height*0.75;
-				addChild(img);
-
-				graphics.beginFill(0xff0000);
-				graphics.drawRect(-5, -5, 10, 10);
-				graphics.endFill();	
 
 			case _:
 				throw "Invalid Tile type " + _type;
@@ -143,7 +134,7 @@ class Tile extends Sprite
 		return switch(_type)
 		{
 			case Wall | Hole: false;
-			case Floor | Exit | Corpse: true;
+			case Floor | Exit : true;
 			case _:
 				throw "Invalid Tile type " + _type;
 		}
@@ -151,10 +142,18 @@ class Tile extends Sprite
 
 	public function moveCost() : Float
 	{
+		if(_contents != null)
+		{
+			if(Std.is(_contents, Corpse))
+				return 2.0;
+			if(Std.is(_contents, Boards))
+				return 0.5;
+		}
+
 		return switch(_type)
 		{
-			case Corpse: 1.5;
-			case _: 0.5;
+			case Flooded: return 3.0;
+			case _: 1.0;
 		}
 	}
 
@@ -172,6 +171,18 @@ class Tile extends Sprite
 		return _type;
 	}
 
+	// --------------------------------------------------------------------------
+	// CONTENTS
+	// --------------------------------------------------------------------------
+
+	private var _contents : GameObject = null;
+
+	public function putObject(obj : GameObject) : GameObject
+	{
+		var prevContents = _contents;
+		_contents = obj;
+		return prevContents;
+	}
 
 	// --------------------------------------------------------------------------
 	// GAS

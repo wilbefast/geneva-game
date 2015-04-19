@@ -4,18 +4,15 @@ import motion.Actuate;
 import openfl.display.Bitmap;
 import openfl.Assets;
 
-class Avatar extends Sprite
+class Avatar extends GameObject
 {
-	private var _tile : Tile;
 	private var _desiredTile : Tile = null;
 
 	private var _life : Float = 1.0;
 
 	public function new(tile : Tile)
 	{
-		super();
-
-		_tile = tile;
+		super(tile);
 
 		/*
 		graphics.beginFill(0xff0000);
@@ -76,11 +73,6 @@ class Avatar extends Sprite
 
 			case _:
 		}
-	}
-
-	public function getTile() : Tile
-	{
-		return _tile;
 	}
 
 	public function isMoving() : Bool

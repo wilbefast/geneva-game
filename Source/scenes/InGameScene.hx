@@ -26,9 +26,19 @@ class InGameScene extends Scene
 		_level = null;
 	}
 
+#if debug
+	private var _capture_gif : Bool = false;
+#end
+
 	public override function onUpdate(dt : Float) : Void
 	{
 		_level.update(dt);
+
+#if debug
+		if(_capture_gif)
+			Screenshot.capture(_level);
+#end
+
 	}
 
 	public override function onKeyPress(keyCode : UInt) : Void
@@ -44,6 +54,9 @@ class InGameScene extends Scene
 
 			case Keyboard.BACKSPACE:
 				onEvent("lose");
+
+			case Keyboard.SPACE:
+				_capture_gif = !_capture_gif;
 #end
 		}
 	}
@@ -69,5 +82,4 @@ class InGameScene extends Scene
 			case _:
 		}
 	}
-
 }

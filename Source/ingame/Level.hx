@@ -15,8 +15,8 @@ class Level extends Sprite
 	private var _avatar : Avatar;
 	private var _avatarLayer : Sprite;
 
-	private var _cannisters : Array<Cannister>;
-	private var _cannistersLayer : Sprite;
+	private var _gameObjects : List<GameObject>;
+	private var _gameObjectsLayer : Sprite;
 
 	private var _gasLayer : Sprite;
 
@@ -31,11 +31,13 @@ class Level extends Sprite
 		{
 			case 0x000000: Wall;
 			case 0xffffff: Floor;
-			case 0xff0000: Corpse;
+			case 0xff0000: CorpseStart;
 			case 0x00ff00: CannisterStart;
 			case 0x0000ff: PlayerStart;
 			case 0x808080: Hole;
 			case 0xffff00: Exit;
+			case 0xff8080: WoundedStart;
+			case 0x808000: BoardsStart;
 			default:
 				throw "Invalid colour " + colour +  " in level image";
 		}
@@ -63,13 +65,13 @@ class Level extends Sprite
 		addChild(_tileLayer);
 		_avatarLayer = new Sprite();
 		addChild(_avatarLayer);
-		_cannistersLayer = new Sprite();
-		addChild(_cannistersLayer);
+		_gameObjectsLayer = new Sprite();
+		addChild(_gameObjectsLayer);
 		_gasLayer = new Sprite();
 		addChild(_gasLayer);
 
 		// Objects holders
-		_cannisters = new Array<Cannister>();
+		_gameObjects = new List<GameObject>();
 
 		// Tiles
 		_tiles = new Array<Tile>();
@@ -96,11 +98,21 @@ class Level extends Sprite
 				// Tile
 				var t = switch(type)
 				{
-					case PlayerStart | CannisterStart:
+					case PlayerStart | 
+						CannisterStart | 
+						WoundedStart |
+						BoardsStart |
+						CorpseStart:
 						 new Tile(gridX, gridY, Floor, gasSprite);
-					case Floor | Hole | Wall | Exit | Corpse:
-						new Tile(gridX, gridY, type, gasSprite);
+					case Floor | 
+						Hole | 
+						Wall | 
+						Exit | 
+						Flooded:
+							new Tile(gridX, gridY, type, gasSprite);
 				}
+				if(t == null)
+					throw "Attempting to add null tile to level";
 				_tiles[i] = t;
 				_tileLayer.addChild(t);
 				t.x = gridX*32;
@@ -113,23 +125,27 @@ class Level extends Sprite
 					gasSprite.y = t.y;
 				}
 
-				// Contained object
+				// Contained objects
+				function _addObject(obj : GameObject, tile : Tile) {
+					_gameObjects.push(obj);
+					_gameObjectsLayer.addChild(obj);
+					obj.x = tile.x;
+					obj.y = tile.y;
+					tile.putObject(obj);
+				}
 				switch(type)
 				{
-					case PlayerStart:
+					case PlayerStart: 
 						_avatar = new Avatar(t);
 						_avatarLayer.addChild(_avatar);
 						_avatar.x = t.x;
 						_avatar.y = t.y;
+					case CannisterStart: _addObject(new Cannister(t), t);
+					case CorpseStart: _addObject(new Corpse(t), t);
+					case WoundedStart: _addObject(new Wounded(t), t);
+					case BoardsStart: _addObject(new Boards(t), t);
 
-					case CannisterStart:
-						var c = new Cannister(t);
-						_cannisters.push(c);
-						_cannistersLayer.addChild(c);
-						c.x = t.x;
-						c.y = t.y;
-
-					case Floor | Hole | Wall | Exit | Corpse:
+					case Floor | Hole | Wall | Exit | Flooded:
 						// do nothing
 				}
 			}
@@ -180,7 +196,7 @@ class Level extends Sprite
 	// STEP
 	// --------------------------------------------------------------------------
 
-	public static inline var STEP_DURATION : Float = 0.3;
+	public static inline var STEP_DURATION : Float = 0.15;
 
 	private var _step_queue : Int = 0;
 	private var _step_in_progress : Bool = false;
@@ -204,7 +220,7 @@ class Level extends Sprite
 		else
 		{
 			// Update everything else
-			for(c in _cannisters)
+			for(c in _gameObjects)
 				c.step();
 
 			for(t in _tiles)

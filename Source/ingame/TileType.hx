@@ -1,9 +1,12 @@
 	enum TileType 
 	{
 	  Floor;
+	  Flooded;
 	  Wall;
 	  Hole;
-	  Corpse;
+	  CorpseStart;
+	  WoundedStart;
+	  BoardsStart;
 	  PlayerStart;
 	  CannisterStart;
 	  Exit;
