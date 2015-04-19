@@ -8,13 +8,9 @@ import openfl.events.KeyboardEvent;
 import openfl.Lib;
 import openfl.ui.Keyboard;
 import openfl.system.System;
-import openfl.media.Sound;
-import openfl.media.SoundChannel;
 
 class TitleScene extends Scene 
 {
-	private var _music_channel : SoundChannel;
-
 	public function new()
 	{
 		super();
@@ -31,19 +27,14 @@ class TitleScene extends Scene
 
 	public override function onEnter(source : Scene) : Void
 	{
-		// Play music
-		#if flash
-			var music = Assets.getSound("assets/title_music.mp3");
-		#else 
-			var music = Assets.getSound("assets/title_music.ogg");
-		#end
-		_music_channel = music.play();
+		// Play the intro sound once
+		Audio.get().playMusic("title_music", 0.8);
 	}
 
 	public override function onExit(destination : Scene) : Void
 	{
-		_music_channel.stop();
-		_music_channel = null;
+		// Stop the intro sound
+		Audio.get().stopMusic("title_music");
 	}
 
 	public override function onUpdate(dt : Float) : Void

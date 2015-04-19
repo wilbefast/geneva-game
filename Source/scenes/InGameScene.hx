@@ -5,16 +5,14 @@ import openfl.events.Event;
 import openfl.Lib;
 import openfl.ui.Keyboard;
 import openfl.Assets;
-import openfl.media.Sound;
-import openfl.media.SoundChannel;
+import openfl.display.Bitmap;
+import openfl.Assets;
+import motion.Actuate;
 
 class InGameScene extends Scene
 {
 	private var _level : Level;
 	private var _levelNumber : Int = 0;
-
-	private var _music : Sound;
-	private var _music_channel :SoundChannel;
 
 	// --------------------------------------------------------------------------
 	// OVERRIDES SCENE
@@ -22,35 +20,43 @@ class InGameScene extends Scene
 
 	public override function onEnter(source : Scene) : Void
 	{
-		if(source != this && _music == null && _music_channel == null)
+		if(source != this)
 		{
-			// Play music
-			#if flash
-				_music = Assets.getSound("assets/music.mp3");
-			#else 
-				_music = Assets.getSound("assets/music.ogg");
-			#end
-			function _loopMusic(_) : Void
+			// Loop the game music
+			Audio.get().playMusic("music");
+
+			// Add the rain
+			var rain_source = [ 
+				Assets.getBitmapData("assets/rain1.png"),
+				Assets.getBitmapData("assets/rain2.png"),
+				Assets.getBitmapData("assets/rain3.png")];
+			var rain = new Bitmap(rain_source[0]);
+			addChild(rain);
+			var _rain_i = 0;
+			function _cycleRain()
 			{
-				_music_channel = _music.play();
-				_music_channel.addEventListener(Event.SOUND_COMPLETE, _loopMusic);
+				Actuate.timer(0.1).onComplete(function() {
+					_rain_i = (_rain_i + 1) % 3;
+					rain.bitmapData = rain_source[_rain_i];
+					_cycleRain();
+				});
 			}
-			_loopMusic(null);
+			_cycleRain();
 		}
 
 		// Load level
 		_level = new Level(_levelNumber);
 		addChild(_level);
+		_level.x = (width - _level.width)*0.5;
+		_level.y = (height - _level.height)*0.5;
 	}
 
 	public override function onExit(destination : Scene) : Void
 	{
-		if(destination != this && _music != null && _music_channel != null)
-		{
-			_music_channel.stop();
-			_music_channel = null;
-			_music = null;
-		}
+		if(destination != this)
+			// Stop the game music
+			Audio.get().stopMusic("music");
+
 		removeChild(_level);
 		_level = null;
 	}

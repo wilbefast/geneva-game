@@ -14,8 +14,11 @@
 	
 	<assets path="Assets" rename="assets" />
 	<icon path="Assets/title.png" />
+
+	<certificate path="/home/william/dev/rsa/william.keystore" if="android" />
 	
 	<window background="#49342b" fps="60" />
 	<window width="640" height="480" unless="mobile" />
+	<window resizable="false" />
 
 </project>
