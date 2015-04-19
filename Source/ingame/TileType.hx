@@ -4,6 +4,6 @@
 	  Wall;
 	  Hole;
 	  PlayerStart;
-	  Cannister;
+	  CannisterStart;
 	  Exit;
 	}

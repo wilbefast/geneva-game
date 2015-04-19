@@ -74,6 +74,8 @@ class SceneManager extends Sprite
 		if(_current != null)
 			removeChild(_current);
 		_current = next;
+
+		Position.relative(_current, 0.5, 0.5);
 	}
 
 	public function goto(sceneName : String)

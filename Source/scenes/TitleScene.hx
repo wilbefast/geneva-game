@@ -16,10 +16,8 @@ class TitleScene extends Scene
 		super();
 
 		// title
-		var title = new Bitmap(Assets.getBitmapData("assets/title.png"));
-		Position.relative(title, 0.5, 0.5);
-
-		addChild(title);
+		addChild(new Bitmap(
+			Assets.getBitmapData("assets/title.png")));
 	}
 
 
