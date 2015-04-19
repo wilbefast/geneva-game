@@ -63,20 +63,32 @@ class Avatar extends GameObject
 
 		var moveCost = newTile.moveCost() + _tile.moveCost();
 		
+		var delay = moveCost*Level.STEP_DURATION;
+
+		_onStartEntering(newTile, delay);
+
 		_desiredTile = newTile;
-		Actuate.tween (this, moveCost*Level.STEP_DURATION, 
+
+		// Move
+		Actuate.tween (this, delay, 
 			{ x : newTile.x, y : newTile.y }, false)
 		.ease(Quad.easeOut)
 		.onComplete (function() {
 			_tile = _desiredTile;
-			_onEnter(_tile);
+			_onFinishEntering(_tile);
 			_desiredTile = null;
 		});
-		
+
+		// Bounce
+		Actuate.update(function(t : Float) {
+			scaleY = 0.9 + 0.1*Math.cos(4 * t * Math.PI);
+		}, delay, [0], [1]);
+
+		// Report cost
 		return Math.floor(moveCost);
 	}
 
-	private function _onEnter(t : Tile)
+	private function _onStartEntering(t : Tile, delay : Float)
 	{
 		var g = t.getGas();
 		if(g <= 0)
@@ -87,6 +99,19 @@ class Avatar extends GameObject
 			if(_life <= 0.0)
 				SceneManager.get().onEvent("lose");
 		}
+
+		switch(t.getType())
+		{
+			case Exit:
+				Actuate.tween(this, delay,
+					{ scaleX : 0, scaleY : 0}, false);
+
+			case _:
+		}
+	}
+
+	private function _onFinishEntering(t : Tile)
+	{
 
 		switch(t.getType())
 		{

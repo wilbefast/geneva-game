@@ -44,26 +44,21 @@ class Tile extends Sprite
 				addChild(img);
 
 			case Wall:
-			/*
-				graphics.beginFill(0xffffff);
-				graphics.drawRect(-16, -16, 32, 32);
-				graphics.endFill();
-			*/
+				// Do nothing
+
 			case Hole:
 				var img = new Bitmap(Assets.getBitmapData(
 					"assets/hole.png"), PixelSnapping.ALWAYS);
 				img.x = -img.width*0.5;
 				img.y = -img.height*0.5;
 				addChild(img);
-			/*
-				graphics.beginFill(0x808080);
-				graphics.drawRect(-10, -10, 20, 20);
-				graphics.endFill();
-			*/
+
 			case Exit:
-				graphics.beginFill(0xffff00);
-				graphics.drawRect(-10, -10, 20, 20);
-				graphics.endFill();		
+				var img = new Bitmap(Assets.getBitmapData(
+					"assets/exit.png"), PixelSnapping.ALWAYS);
+				img.x = -img.width*0.5;
+				img.y = -img.height*0.5;
+				addChild(img);	
 
 			case _:
 				throw "Invalid Tile type " + _type;

@@ -65,10 +65,10 @@ class Level extends Sprite
 		// Layers
 		_tileLayer = new Sprite();
 		addChild(_tileLayer);
-		_avatarLayer = new Sprite();
-		addChild(_avatarLayer);
 		_gameObjectsLayer = new Sprite();
 		addChild(_gameObjectsLayer);
+		_avatarLayer = new Sprite();
+		addChild(_avatarLayer);
 		_gasLayer = new Sprite();
 		addChild(_gasLayer);
 

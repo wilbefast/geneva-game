@@ -1,11 +1,19 @@
+import openfl.display.Sprite;
+import openfl.display.Bitmap;
+import openfl.display.PixelSnapping;
+import openfl.Assets;
+
 class Corpse extends GameObject
 {
 	public function new(tile : Tile)
 	{
 		super(tile);
 
-		graphics.beginFill(0xff0000);
-		graphics.drawRect(-6, -6, 12, 12);
-		graphics.endFill();
+		var img = new Bitmap(Assets.getBitmapData(
+			"assets/corpse.png"),
+			PixelSnapping.ALWAYS);
+		img.x = -img.width*0.5;
+		img.y = -img.height*0.5;
+		addChild(img);
 	}
 }
