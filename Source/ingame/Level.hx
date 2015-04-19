@@ -1,5 +1,6 @@
 import openfl.display.Sprite;
 import openfl.display.BitmapData;
+import openfl.display.Bitmap;
 import openfl.Assets;
 import motion.Actuate;
 
@@ -20,6 +21,7 @@ class Level extends Sprite
 
 	private var _gasLayer : Sprite;
 
+	private var _rain : Bitmap;
 
 	// --------------------------------------------------------------------------
 	// INIT
@@ -233,8 +235,7 @@ class Level extends Sprite
 			.onComplete(function() {
 				_step_in_progress = false;
 			});
-
-
 		}
-			
-	}}
+	}
+
+}

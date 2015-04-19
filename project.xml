@@ -15,7 +15,7 @@
 	<assets path="Assets" rename="assets" />
 	<icon path="Assets/title.png" />
 	
-	<window background="#333333" fps="60" />
+	<window background="#49342b" fps="60" />
 	<window width="640" height="480" unless="mobile" />
 
 </project>
