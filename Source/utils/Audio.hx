@@ -76,6 +76,12 @@ class Audio
 		_music[name].stop();
 	}
 
+	public function playSound(name : String)
+	{
+		if(_transform.volume > 0)
+			_sound(name).play();
+	}
+
 	// --------------------------------------------------------------------------
 	// VOLUME / MUTE
 	// --------------------------------------------------------------------------

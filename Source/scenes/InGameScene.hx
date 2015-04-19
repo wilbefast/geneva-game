@@ -116,13 +116,13 @@ class InGameScene extends Scene
 				SceneManager.get().goto("Title");
 
 #if debug
-			case Keyboard.ENTER:
+			case Keyboard.SHIFT:
 				onEvent("win");
 
 			case Keyboard.BACKSPACE:
 				onEvent("lose");
 
-			case Keyboard.SPACE:
+			case Keyboard.CAPSLOCK:
 				_capture_gif = !_capture_gif;
 #end
 		}
@@ -133,7 +133,8 @@ class InGameScene extends Scene
 
 	}
 
-	public override function onEvent(name : String) : Void
+	public override function onEvent(name : String, 
+		?args : Dynamic) : Void
 	{
 		switch(name)
 		{
@@ -145,6 +146,9 @@ class InGameScene extends Scene
 			case "lose":
 				onExit(this);
 				onEnter(this);
+
+			case "switchCircuit":
+				_level.switchCircuit(args);
 
 			case _:
 		}

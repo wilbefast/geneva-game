@@ -10,4 +10,6 @@
 	  PlayerStart;
 	  CannisterStart;
 	  Exit;
+	  DoorSwitch(circuit : UInt);
+	  Door(circuit : UInt);
 	}

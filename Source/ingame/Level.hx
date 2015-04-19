@@ -4,6 +4,7 @@ import openfl.display.Bitmap;
 import openfl.display.PixelSnapping;
 import openfl.Assets;
 import motion.Actuate;
+import openfl.media.Sound;
 
 class Level extends Sprite
 {
@@ -42,6 +43,10 @@ class Level extends Sprite
 			case 0x00ffff: Flooded;
 			case 0xff8080: WoundedStart;
 			case 0x808000: BoardsStart;
+			case x if (x < 0x0000ff):
+				return Door(x);
+			case x if (x < 0x00ff00):
+				return DoorSwitch(x - 0x0000ff);
 			default:
 				throw "Invalid colour " + colour +  " in level image";
 		}
@@ -108,6 +113,8 @@ class Level extends Sprite
 						Hole | 
 						Wall | 
 						Exit | 
+						DoorSwitch(_) |
+						Door(_) |
 						Flooded:
 							new Tile(gridX, gridY, type, gasSprite);
 				}
@@ -145,7 +152,7 @@ class Level extends Sprite
 					case WoundedStart: _addObject(new Wounded(t), t);
 					case BoardsStart: _addObject(new Boards(t), t);
 
-					case Floor | Hole | Wall | Exit | Flooded:
+					case Floor | Hole | Wall | Exit | Flooded | Door(_) | DoorSwitch(_):
 						// do nothing
 				}
 			}
@@ -235,13 +242,28 @@ class Level extends Sprite
 				_step_queue++;
 			else
 			{
-				// Move avatar ?
-				var d = Input.getDirection();
-				var dx : Int = d.x < 0 ? Math.floor(d.x) : Math.ceil(d.x);
-				var dy : Int = d.y < 0 ? Math.floor(d.y) : Math.ceil(d.y);
-				if(dx != 0 || dy != 0)
-					_step_queue = _avatar.tryMove(
-						_avatar.getTile().getNeighbour(dx, dy));
+				// Interact avatar ?
+				if(Input.desiredInteraction())
+					_step_queue = _avatar.tryInteract();
+
+				if(_step_queue <= 0)
+				{
+					// Move avatar ?
+					var d = Input.getDirection();
+					var dx : Int = d.x < 0 ? Math.floor(d.x) : Math.ceil(d.x);
+					var dy : Int = d.y < 0 ? Math.floor(d.y) : Math.ceil(d.y);
+					if(dx != 0 || dy != 0)
+						_step_queue = _avatar.tryMove(
+							_avatar.getTile().getNeighbour(dx, dy));
+
+					if(_step_queue > 0)
+						Audio.get().playSound("footstep");
+				}
+				else if(_step_queue <= 1)
+					Audio.get().playSound("footstep");
+				else
+					Audio.get().playSound("interact");
+
 			}
 		}
 		else
@@ -263,4 +285,12 @@ class Level extends Sprite
 		}
 	}
 
+	// --------------------------------------------------------------------------
+	// CIRCUITS
+	// --------------------------------------------------------------------------
+
+	public function switchCircuit(circuit : UInt)
+	{
+		trace("turning on circuit " + circuit);
+	}
 }

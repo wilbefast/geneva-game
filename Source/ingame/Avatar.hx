@@ -53,6 +53,12 @@ class Avatar extends GameObject
 		return (_life <= 0);
 	}
 
+
+	// --------------------------------------------------------------------------
+	// MOVE
+	// --------------------------------------------------------------------------
+
+
 	public function tryMove(newTile : Tile) : Int
 	{
 		if(_life <= 0)
@@ -125,7 +131,7 @@ class Avatar extends GameObject
 		return Math.floor(moveCost);
 	}
 
-	private function _onStartEntering(t : Tile, delay : Float)
+	private function _checkForDamage(t : Tile)
 	{
 		var g = t.getGas();
 		if(g <= 0)
@@ -134,17 +140,27 @@ class Avatar extends GameObject
 		{
 			_life -= 2*g;
 			if(_life <= 0.0)
+			{
+				Audio.get().playSound("die");
 				Actuate.tween(this, 1.0,
 					{ scaleX : 0, scaleY : 0}, false)
 				.onComplete(function() {
 					SceneManager.get().onEvent("lose");
 				});
-				
+			}	
+			else
+				Audio.get().playSound("hurt");
 		}
+	}
+
+	private function _onStartEntering(t : Tile, delay : Float)
+	{
+		_checkForDamage(t);
 
 		switch(t.getType())
 		{
 			case Exit:
+				Audio.get().playSound("next");
 				Actuate.tween(this, delay,
 					{ scaleX : 0, scaleY : 0}, false);
 
@@ -167,5 +183,39 @@ class Avatar extends GameObject
 	public function isMoving() : Bool
 	{
 		return (_desiredTile != null);
+	}
+
+
+	// --------------------------------------------------------------------------
+	// INTERACT
+	// --------------------------------------------------------------------------
+
+	public function tryInteract() : Int
+	{
+		var cost = 1;
+
+		switch(_tile.getType())
+		{
+			case DoorSwitch(circuit):
+				cost = 3;
+				SceneManager.get().onEvent("switchCircuit", circuit);
+
+			case _:
+		}
+
+		// Bounce
+		var _base_y = _img.y;
+		Actuate.update(function(t : Float) {
+			scaleY = 0.9 + 0.1*Math.cos(8 * t * Math.PI);
+			_img.y = _base_y + 2*Math.sin(8 * t * Math.PI);
+		}, cost*Level.STEP_DURATION, [0], [1])
+		.onComplete(function() {
+			_checkForDamage(_tile);
+			_img.y = _base_y;
+			scaleY = 1;	
+		});
+
+
+		return cost;
 	}
 }

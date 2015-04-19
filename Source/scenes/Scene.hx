@@ -37,7 +37,7 @@ class Scene extends Sprite
 		// override me
 	}
 
-	public function onEvent(name : String) : Void
+	public function onEvent(name : String, ?args : Dynamic) : Void
 	{
 		// override me
 	}

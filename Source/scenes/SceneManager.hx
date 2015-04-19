@@ -101,9 +101,9 @@ class SceneManager extends Sprite
 		_goto(scene);
 	}
 
-	public function onEvent(name : String)
+	public function onEvent(name : String, ?args : Dynamic)
 	{
 		if(_current != null)
-			_current.onEvent(name);
+			_current.onEvent(name, args);
 	}
 }

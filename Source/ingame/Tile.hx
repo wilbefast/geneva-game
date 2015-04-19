@@ -79,7 +79,11 @@ class Tile extends Sprite
 					"assets/exit.png"), PixelSnapping.ALWAYS);
 				img.x = -img.width*0.5;
 				img.y = -img.height*0.5;
-				addChild(img);	
+				addChild(img);
+
+			case DoorSwitch(circuit):
+
+			case Door(circuit):	
 
 			case _:
 				throw "Invalid Tile type " + _type;
@@ -151,6 +155,8 @@ class Tile extends Sprite
 		return switch(_type)
 		{
 			case Wall | Hole: false;
+			case Door(circuit): false;
+			case DoorSwitch(circuit): true;
 			case Floor | Exit | Flooded : true;
 			case _:
 				throw "Invalid Tile type " + _type;
@@ -179,6 +185,7 @@ class Tile extends Sprite
 		return switch(_type)
 		{
 			case Wall : false;
+			case Door(circuit) : false; // TODO
 			case _: true;
 		}
 	}

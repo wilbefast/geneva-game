@@ -39,4 +39,10 @@ class Input
 
 		return new Vector2(x, y);
 	}
+
+	public static function desiredInteraction() : Bool
+	{
+		return (isPressed(Keyboard.SPACE) 
+			|| isPressed(Keyboard.ENTER));
+	}
 }
