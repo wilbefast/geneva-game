@@ -10,6 +10,8 @@ class Level extends Sprite
 	private var _width : Int = 0;
 	private var _height : Int = 0;
 
+	private var _tileLayer : Sprite;
+
 	private var _avatar : Avatar;
 	private var _avatarLayer : Sprite;
 
@@ -57,6 +59,8 @@ class Level extends Sprite
 		_height = bitmap.height;
 
 		// Layers
+		_tileLayer = new Sprite();
+		addChild(_tileLayer);
 		_avatarLayer = new Sprite();
 		addChild(_avatarLayer);
 		_cannistersLayer = new Sprite();
@@ -98,7 +102,7 @@ class Level extends Sprite
 						new Tile(gridX, gridY, type, gasSprite);
 				}
 				_tiles[i] = t;
-				addChild(t);
+				_tileLayer.addChild(t);
 				t.x = gridX*32;
 				t.y = gridY*32;
 

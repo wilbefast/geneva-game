@@ -1,4 +1,6 @@
 import openfl.display.Sprite;
+import openfl.display.Bitmap;
+import openfl.Assets;
 
 class Tile extends Sprite
 {
@@ -31,23 +33,46 @@ class Tile extends Sprite
 		switch(_type)
 		{
 			case Floor:
+				var img = new Bitmap(Assets.getBitmapData(
+					"assets/mud" + Std.string(Std.random(6) + 1) + ".png"));
+				img.x = -img.width*0.5;
+				img.y = -img.height*0.75;
+				addChild(img);
 
 			case Wall:
+				var img = new Bitmap(Assets.getBitmapData(
+					"assets/light_mud" + Std.string(Std.random(6) + 1) + ".png"));
+				img.x = -img.width*0.5;
+				img.y = -img.height*0.75;
+				addChild(img);
+			/*
 				graphics.beginFill(0xffffff);
 				graphics.drawRect(-16, -16, 32, 32);
 				graphics.endFill();
-
+			*/
 			case Hole:
+				var img = new Bitmap(Assets.getBitmapData(
+					"assets/hole.png"));
+				img.x = -img.width*0.5;
+				img.y = -img.height*0.75;
+				addChild(img);
+			/*
 				graphics.beginFill(0x808080);
 				graphics.drawRect(-10, -10, 20, 20);
 				graphics.endFill();
-
+			*/
 			case Exit:
 				graphics.beginFill(0xffff00);
 				graphics.drawRect(-10, -10, 20, 20);
 				graphics.endFill();		
 
 			case Corpse:
+				var img = new Bitmap(Assets.getBitmapData(
+					"assets/mud" + Std.string(Std.random(6) + 1) + ".png"));
+				img.x = -img.width*0.5;
+				img.y = -img.height*0.75;
+				addChild(img);
+
 				graphics.beginFill(0xff0000);
 				graphics.drawRect(-5, -5, 10, 10);
 				graphics.endFill();	

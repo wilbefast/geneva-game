@@ -1,7 +1,8 @@
 import openfl.display.Sprite;
 import motion.easing.Quad;
 import motion.Actuate;
-
+import openfl.display.Bitmap;
+import openfl.Assets;
 
 class Avatar extends Sprite
 {
@@ -16,9 +17,18 @@ class Avatar extends Sprite
 
 		_tile = tile;
 
+		/*
 		graphics.beginFill(0xff0000);
 		graphics.drawRect(-10, -10, 20, 20);
 		graphics.endFill();
+		*/
+		var img = new Bitmap(
+			Assets.getBitmapData("assets/avatar_n.png"));
+		var centre = new Sprite();
+		centre.x = -img.width*0.5;
+		centre.y = -img.height*0.75;
+		addChild(centre);
+		centre.addChild(img);
 	}
 
 	public function tryMove(newTile : Tile) : Int
@@ -33,7 +43,6 @@ class Avatar extends Sprite
 			return 0;
 
 		var moveCost = newTile.moveCost() + _tile.moveCost();
-		trace(moveCost);
 
 		_desiredTile = newTile;
 		Actuate.tween (this, moveCost*Level.STEP_DURATION, 
