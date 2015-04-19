@@ -21,27 +21,31 @@ class Avatar extends Sprite
 		graphics.endFill();
 	}
 
-	public function tryMove(newTile : Tile) : Bool
+	public function tryMove(newTile : Tile) : Int
 	{
 		if(newTile == null)
-			return false;
+			return 0;
 
 		if(isMoving())
-			return false;
+			return 0;
 
 		if(!newTile.isWalkable())
-			return false;
+			return 0;
+
+		var moveCost = newTile.moveCost() + _tile.moveCost();
+		trace(moveCost);
 
 		_desiredTile = newTile;
-		Actuate.tween (this, 0.5, { x: newTile.x, y: newTile.y }, false)
-		.ease (Quad.easeOut)
+		Actuate.tween (this, moveCost*Level.STEP_DURATION, 
+			{ x : newTile.x, y : newTile.y }, false)
+		.ease(Quad.easeOut)
 		.onComplete (function() {
 			_tile = _desiredTile;
 			_onEnter(_tile);
 			_desiredTile = null;
 		});
 		
-		return true;
+		return Math.floor(moveCost);
 	}
 
 	private function _onEnter(t : Tile)

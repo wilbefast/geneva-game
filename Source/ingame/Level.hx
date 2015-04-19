@@ -1,6 +1,7 @@
 import openfl.display.Sprite;
 import openfl.display.BitmapData;
 import openfl.Assets;
+import motion.Actuate;
 
 class Level extends Sprite
 {
@@ -16,6 +17,11 @@ class Level extends Sprite
 	private var _cannistersLayer : Sprite;
 
 	private var _gasLayer : Sprite;
+
+
+	// --------------------------------------------------------------------------
+	// INIT
+	// --------------------------------------------------------------------------
 
 	private static function _getColourType(colour : UInt) : TileType
 	{
@@ -153,6 +159,11 @@ class Level extends Sprite
 			throw "Level file contains no avatar start position";
 	}
 
+	// --------------------------------------------------------------------------
+	// QUERY
+	// --------------------------------------------------------------------------
+
+
 	public function getTile(gridX : Int, gridY : Int) : Tile
 	{
 		if(gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height)
@@ -161,25 +172,49 @@ class Level extends Sprite
 		return _tiles[gridY*_width + gridX];
 	}
 
+	// --------------------------------------------------------------------------
+	// STEP
+	// --------------------------------------------------------------------------
+
+	public static inline var STEP_DURATION : Float = 0.3;
+
+	private var _step_queue : Int = 0;
+	private var _step_in_progress : Bool = false;
+
 	public function update(dt : Float)
 	{
-		// Move avatar
-		var avatarMoved = false;
-		var d = Input.getDirection();
-		var dx : Int = d.x < 0 ? Math.floor(d.x) : Math.ceil(d.x);
-		var dy : Int = d.y < 0 ? Math.floor(d.y) : Math.ceil(d.y);
-		if(dx != 0 || dy != 0)
-			avatarMoved = _avatar.tryMove(
-				_avatar.getTile().getNeighbour(dx, dy));
-
-		// Update everything only if the avatar moved
-		if(avatarMoved)
+		if(_step_in_progress)
 		{
+			// Wait till end of step ...
+		}
+		else if(_step_queue == 0)
+		{
+			// Move avatar ?
+			var d = Input.getDirection();
+			var dx : Int = d.x < 0 ? Math.floor(d.x) : Math.ceil(d.x);
+			var dy : Int = d.y < 0 ? Math.floor(d.y) : Math.ceil(d.y);
+			if(dx != 0 || dy != 0)
+				_step_queue = _avatar.tryMove(
+					_avatar.getTile().getNeighbour(dx, dy));
+		}
+		else
+		{
+			// Update everything else
 			for(c in _cannisters)
 				c.step();
 
 			for(t in _tiles)
 				t.step();
+
+			// Wait for the step to finish
+			_step_queue--;
+			_step_in_progress = true;
+			Actuate.timer(STEP_DURATION)
+			.onComplete(function() {
+				_step_in_progress = false;
+			});
+
+
 		}
-	}
-}
+			
+	}}

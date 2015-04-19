@@ -113,7 +113,7 @@ class Tile extends Sprite
 		throw "Invalid parameters 0, 0 passed to Tile::getNeighbour";
 	}
 
-	public function isWalkable()
+	public function isWalkable() : Bool
 	{
 		return switch(_type)
 		{
@@ -124,14 +124,21 @@ class Tile extends Sprite
 		}
 	}
 
+	public function moveCost() : Float
+	{
+		return switch(_type)
+		{
+			case Corpse: 1.5;
+			case _: 0.5;
+		}
+	}
+
 	public function isGasable()
 	{
 		return switch(_type)
 		{
 			case Wall : false;
-			case Floor | Exit | Hole : true;
-			case _:
-				throw "Invalid Tile type " + _type;
+			case _: true;
 		}
 	}
 
