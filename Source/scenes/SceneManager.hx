@@ -85,4 +85,10 @@ class SceneManager extends Sprite
 			throw "Invalid scene name passed to SceneManager::goto";
 		_goto(scene);
 	}
+
+	public function onEvent(name : String)
+	{
+		if(_current != null)
+			_current.onEvent(name);
+	}
 }

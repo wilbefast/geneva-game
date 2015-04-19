@@ -146,6 +146,11 @@ class Tile extends Sprite
 
 	private var _gasSprite : Sprite = null;
 
+	public function getGas() : Float
+	{
+		return _gas;
+	}
+
 	public function step()
 	{
 		addGas(0.0, _gasDistance);

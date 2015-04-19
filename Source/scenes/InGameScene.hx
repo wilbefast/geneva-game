@@ -8,6 +8,7 @@ import openfl.ui.Keyboard;
 class InGameScene extends Scene
 {
 	private var _level : Level;
+	private var _levelNumber : Int = 0;
 
 	// --------------------------------------------------------------------------
 	// OVERRIDES SCENE
@@ -15,7 +16,7 @@ class InGameScene extends Scene
 
 	public override function onEnter(source : Scene) : Void
 	{
-		_level = new Level(0);
+		_level = new Level(_levelNumber);
 		addChild(_level);
 	}
 
@@ -43,4 +44,22 @@ class InGameScene extends Scene
 	{
 
 	}
+
+	public override function onEvent(name : String) : Void
+	{
+		switch(name)
+		{
+			case "win":
+				_levelNumber++;
+				onExit(this);
+				onEnter(this);
+
+			case "lose":
+				onExit(this);
+				onEnter(this);
+
+			case _:
+		}
+	}
+
 }

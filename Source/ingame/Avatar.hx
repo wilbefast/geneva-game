@@ -8,6 +8,8 @@ class Avatar extends Sprite
 	private var _tile : Tile;
 	private var _desiredTile : Tile = null;
 
+	private var _life : Float = 1.0;
+
 	public function new(tile : Tile)
 	{
 		super();
@@ -44,8 +46,21 @@ class Avatar extends Sprite
 
 	private function _onEnter(t : Tile)
 	{
+		var g = t.getGas();
+		if(g <= 0)
+			_life = Math.min(1.0, _life + 0.2);
+		else
+		{
+			_life -= g;
+			if(_life <= 0.0)
+				SceneManager.get().onEvent("lose");
+		}
+
 		switch(t.getType())
 		{
+			case Exit:
+				SceneManager.get().onEvent("win");
+
 			case _:
 		}
 	}

@@ -27,4 +27,9 @@ class Scene extends Sprite
 		// override me
 	}
 
+	public function onEvent(name : String) : Void
+	{
+		// override me
+	}
+
 }

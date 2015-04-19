@@ -37,7 +37,13 @@ class Level extends Sprite
 		super();
 
 		// load image
-		var bitmap = Assets.getBitmapData ("assets/level01.png");
+		var levelNumberStr = Std.string(levelNumber + 1);
+		while(levelNumberStr.length < 2)
+			levelNumberStr = '0' + levelNumberStr;
+		var bitmap = Assets.getBitmapData (
+			"assets/level" + levelNumberStr + ".png");
+		if(bitmap == null)
+			throw "No file exists for level '" + levelNumberStr + "'";
 
 		// Dimensions
 		_width = bitmap.width;
