@@ -2,6 +2,7 @@ import openfl.display.Sprite;
 import openfl.Lib;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 import haxe.Timer;
 
 class SceneManager extends Sprite
@@ -32,6 +33,20 @@ class SceneManager extends Sprite
 		function(e : KeyboardEvent) {
 			if(_current != null)
 				_current.onKeyRelease(e.keyCode);
+		});
+
+		// Mouse pressed
+		Lib.current.stage.addEventListener(MouseEvent.MOUSE_DOWN, 
+		function(e : MouseEvent) {
+			if(_current != null)
+				_current.onMousePress(e.localX, e.localY);
+		});
+
+		// Mouse released
+		Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, 
+		function(e : MouseEvent) {
+			if(_current != null)
+				_current.onMouseRelease(e.localX, e.localY);
 		});
 
 		// Update

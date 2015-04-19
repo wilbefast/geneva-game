@@ -23,12 +23,6 @@ class InGameScene extends Scene
 
 	public override function onEnter(source : Scene) : Void
 	{
-		// Add background
-		var background = new Bitmap(
-			Assets.getBitmapData("assets/background.png"),
-			PixelSnapping.ALWAYS);
-		addChild(background);
-
 		// Load level
 		_level = new Level(_levelNumber);
 		addChild(_level);
@@ -58,7 +52,7 @@ class InGameScene extends Scene
 			Assets.getBitmapData("assets/rain1.png"),
 			Assets.getBitmapData("assets/rain2.png"),
 			Assets.getBitmapData("assets/rain3.png")];
-		var _rain = new Bitmap(rain_source[0], PixelSnapping.ALWAYS);
+		_rain = new Bitmap(rain_source[0], PixelSnapping.ALWAYS);
 		addChild(_rain);
 		var _rain_i = 0;
 		function _cycleRain()

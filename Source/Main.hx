@@ -22,6 +22,12 @@ class Main extends Sprite
 		// Set up the input manager
 		Input.listen();
 
+		// Add background
+		var background = new Bitmap(
+			Assets.getBitmapData("assets/background.png"),
+			PixelSnapping.ALWAYS);
+		addChild(background);
+
 		// Set up the scene manager
 		var scenes = SceneManager.get();
 		scenes.set("Title", new TitleScene());

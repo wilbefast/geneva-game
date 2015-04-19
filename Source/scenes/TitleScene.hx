@@ -18,13 +18,6 @@ class TitleScene extends Scene
 	{
 		super();
 
-		// background
-		var background = new Bitmap(
-			Assets.getBitmapData("assets/background.png"),
-			PixelSnapping.ALWAYS);
-		addChild(background);
-		background.y += 80;
-
 		// Add the rain
 		var rain_source = [ 
 			Assets.getBitmapData("assets/rain1.png"),
@@ -106,6 +99,11 @@ class TitleScene extends Scene
 			case Keyboard.ESCAPE:
 				System.exit(0);
 		}
+	}
+
+	public override function onMousePress(x : Float, y : Float) : Void
+	{
+		SceneManager.get().goto("InGame");
 	}
 
 	public override function onKeyRelease(keyCode : UInt) : Void

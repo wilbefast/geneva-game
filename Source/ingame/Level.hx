@@ -1,6 +1,7 @@
 import openfl.display.Sprite;
 import openfl.display.BitmapData;
 import openfl.display.Bitmap;
+import openfl.display.PixelSnapping;
 import openfl.Assets;
 import motion.Actuate;
 
@@ -168,7 +169,23 @@ class Level extends Sprite
 				if(gridX >= 1)
 					w = getTile(gridX - 1, gridY);
 
-				_tiles[gridY*_width + gridX].setNeighbours(n, s, e, w);
+				var t = _tiles[gridY*_width + gridX];
+				t.setNeighbours(n, s, e, w);
+			
+				// Tiles based on neighbourhood
+				if(t.getType() == Wall 
+				&& s != null 
+				&& s.getType() != Wall
+				&& s.getType() != Exit)
+				{
+					var img = new Bitmap(Assets.getBitmapData(
+					"assets/wall.png"),
+					PixelSnapping.ALWAYS);
+					img.x = t.x - img.width*0.5;
+					img.y = t.y - img.height*0.5;
+
+					_gameObjectsLayer.addChild(img);
+				}
 			}
 		}
 

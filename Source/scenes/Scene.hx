@@ -27,6 +27,16 @@ class Scene extends Sprite
 		// override me
 	}
 
+	public function onMousePress(x : Float, y : Float) : Void
+	{
+		// override me
+	}
+
+	public function onMouseRelease(x : Float, y : Float) : Void
+	{
+		// override me
+	}
+
 	public function onEvent(name : String) : Void
 	{
 		// override me
