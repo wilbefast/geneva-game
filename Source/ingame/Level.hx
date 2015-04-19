@@ -90,10 +90,6 @@ class Level extends Sprite
 				{
 					gasSprite = new Sprite();
 					var g = gasSprite.graphics;
-					g.beginFill(0x00ff00);
-					g.drawRect(-16, -16, 32, 32);
-					g.endFill();
-					gasSprite.alpha = 0.0;
 					_gasLayer.addChild(gasSprite);
 				}
 

@@ -1,7 +1,10 @@
 import openfl.display.Sprite;
 import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.PixelSnapping;
 import openfl.Assets;
+import motion.easing.Quad;
+import motion.Actuate;
 
 class Tile extends Sprite
 {
@@ -29,7 +32,17 @@ class Tile extends Sprite
 		this.gridY = gridY;
 
 		_gasSprite = gasSprite;
+		if(_gasSprite != null)
+		{
+			_gasBitmap = new Bitmap(
+				Assets.getBitmapData("assets/gas_small.png"),
+				PixelSnapping.ALWAYS);
+			_gasSprite.addChild(_gasBitmap);
+			_gasSprite.alpha = 0;
 
+			_gas_bounce_t = Math.random();
+			
+		}
 
 		// Graphics depending on tile type
 		_type = type;
@@ -189,6 +202,8 @@ class Tile extends Sprite
 	private var _gasDistance : Int = 0x3FFFFFF;
 
 	private var _gasSprite : Sprite = null;
+	private var _gasBitmap : Bitmap = null;
+	private var _gas_bounce_t : Float = 0.0;
 
 	public function getGas() : Float
 	{
@@ -198,6 +213,23 @@ class Tile extends Sprite
 	public function step()
 	{
 		addGas(0.0, _gasDistance);
+
+		// Bounce
+		if(_gas > 0)
+		{
+			var base = _gas_bounce_t;
+			Actuate.update(function(t : Float) {
+
+				_gas_bounce_t = base + 0.1*t*Level.STEP_DURATION;
+				if(_gas_bounce_t > 1)
+					_gas_bounce_t -= 1;
+
+				_gasSprite.scaleY = 
+					1 + 0.2*Math.cos(2 * _gas_bounce_t * Math.PI);
+				_gasSprite.scaleX = 
+					1 + 0.2*Math.cos(2 * _gas_bounce_t * Math.PI);
+			}, Level.STEP_DURATION, [0], [1]);
+		}
 	}
 
 	public function addGas(amount : Float, distance : Int)
@@ -232,6 +264,25 @@ class Tile extends Sprite
 		
 		// Adjust gas visibility
 		if(_gasSprite != null)
-			_gasSprite.alpha = _gas;
+		{
+			if(_gas <= 0)
+				_gasSprite.alpha = 0;
+			else 
+			{
+				_gasSprite.alpha = 1;
+				if(_gas < 0.5)
+				_gasBitmap.bitmapData = Assets.getBitmapData(
+					"assets/gas_small.png");
+				else if(_gas < 0.75)
+					_gasBitmap.bitmapData = Assets.getBitmapData(
+						"assets/gas_medium.png");
+				else
+					_gasBitmap.bitmapData = Assets.getBitmapData(
+						"assets/gas_large.png");	
+
+				_gasBitmap.x = -_gasBitmap.width*0.5;
+				_gasBitmap.y = -_gasBitmap.height*0.5;
+			}	
+		}
 	}
 }

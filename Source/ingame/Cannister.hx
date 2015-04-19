@@ -1,12 +1,24 @@
+import openfl.display.Sprite;
+import openfl.display.Bitmap;
+import openfl.display.PixelSnapping;
+import openfl.Assets;
+
 class Cannister extends GameObject
 {
 	public function new(tile : Tile)
 	{
 		super(tile);
 
-		graphics.beginFill(0x00ff00);
-		graphics.drawRect(-6, -6, 12, 12);
-		graphics.endFill();
+		var img = new Bitmap(Assets.getBitmapData(
+			"assets/cannister.png"),
+			PixelSnapping.ALWAYS);
+		if(Std.random(2) == 0)
+			img.scaleX = -1;
+		else
+			img.scaleX = 1;
+		img.x = -img.width*0.5;
+		img.y = -img.height*0.75;
+		addChild(img);
 	}
 	
 	public override function step()
