@@ -196,9 +196,9 @@ class Avatar extends GameObject
 
 		switch(_tile.getType())
 		{
-			case DoorSwitch(circuit):
+			case DoorSwitch(c):
 				cost = 3;
-				SceneManager.get().onEvent("switchCircuit", circuit);
+				Circuits.get().switchCircuit(c);
 
 			case _:
 		}

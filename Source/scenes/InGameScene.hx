@@ -122,7 +122,7 @@ class InGameScene extends Scene
 			case Keyboard.BACKSPACE:
 				onEvent("lose");
 
-			case Keyboard.CAPSLOCK:
+			case Keyboard.CAPS_LOCK:
 				_capture_gif = !_capture_gif;
 #end
 		}
@@ -146,10 +146,7 @@ class InGameScene extends Scene
 			case "lose":
 				onExit(this);
 				onEnter(this);
-
-			case "switchCircuit":
-				_level.switchCircuit(args);
-
+				
 			case _:
 		}
 	}

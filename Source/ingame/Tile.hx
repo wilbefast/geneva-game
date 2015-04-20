@@ -48,7 +48,7 @@ class Tile extends Sprite
 		_type = type;
 		switch(type)
 		{
-			case Floor:
+			case (DoorSwitch(_) | Door(_) | Floor):
 				var img = new Bitmap(Assets.getBitmapData(
 					"assets/mud" + Std.string(Std.random(6) + 1) + ".png"),
 					PixelSnapping.ALWAYS);
@@ -81,9 +81,6 @@ class Tile extends Sprite
 				img.y = -img.height*0.5;
 				addChild(img);
 
-			case DoorSwitch(circuit):
-
-			case Door(circuit):	
 
 			case _:
 				throw "Invalid Tile type " + _type;
@@ -154,12 +151,12 @@ class Tile extends Sprite
 	{
 		return switch(_type)
 		{
-			case Wall | Hole: false;
-			case Door(circuit): false;
-			case DoorSwitch(circuit): true;
-			case Floor | Exit | Flooded : true;
-			case _:
-				throw "Invalid Tile type " + _type;
+			case Wall | Hole: 
+				false;
+			case Door(circuit): 
+				Circuits.get().isOn(circuit);
+			case _: 
+				true;
 		}
 	}
 
@@ -184,9 +181,12 @@ class Tile extends Sprite
 	{
 		return switch(_type)
 		{
-			case Wall : false;
-			case Door(circuit) : false; // TODO
-			case _: true;
+			case Wall : 
+				false;
+			case Door(circuit): 
+				Circuits.get().isOn(circuit);
+			case _: 
+				true;
 		}
 	}
 
@@ -273,7 +273,7 @@ class Tile extends Sprite
 					t.addGas(offer_each, distance + 1);
 			}
 			else
-				_gasSurplus = surplus;
+				_gasSurplus = Math.min(1, surplus);
 		}
 
 		

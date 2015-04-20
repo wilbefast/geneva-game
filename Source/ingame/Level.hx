@@ -46,7 +46,7 @@ class Level extends Sprite
 			case x if (x < 0x0000ff):
 				return Door(x);
 			case x if (x < 0x00ff00):
-				return DoorSwitch(x - 0x0000ff);
+				return DoorSwitch(x >> 8);
 			default:
 				throw "Invalid colour " + colour +  " in level image";
 		}
@@ -55,6 +55,9 @@ class Level extends Sprite
 	public function new(levelNumber : Int)
 	{
 		super();
+
+		// reset circuits
+		Circuits.get().reset();
 
 		// load image
 		var levelNumberStr = Std.string(levelNumber + 1);
@@ -152,7 +155,13 @@ class Level extends Sprite
 					case WoundedStart: _addObject(new Wounded(t), t);
 					case BoardsStart: _addObject(new Boards(t), t);
 
-					case Floor | Hole | Wall | Exit | Flooded | Door(_) | DoorSwitch(_):
+					case Door(c):
+						Circuits.get().registerDoor(t, c);
+
+					case DoorSwitch(c):
+						Circuits.get().registerSwitch(t, c);
+
+					case _:
 						// do nothing
 				}
 			}
@@ -285,12 +294,21 @@ class Level extends Sprite
 		}
 	}
 
+
 	// --------------------------------------------------------------------------
-	// CIRCUITS
+	// BATCH
 	// --------------------------------------------------------------------------
 
-	public function switchCircuit(circuit : UInt)
+	public function forEach(f : Tile -> Int -> Int -> Bool) : Bool
 	{
-		trace("turning on circuit " + circuit);
+		for(gridX in 0 ... _width)
+		{
+			for(gridY in 0 ... _height)
+			{
+				if(!f(_tiles[gridY*_width + gridX], gridX, gridY))
+					return false;
+			}
+		}
+		return true;
 	}
 }
