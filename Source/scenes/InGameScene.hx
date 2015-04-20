@@ -140,8 +140,17 @@ class InGameScene extends Scene
 		{
 			case "win":
 				_levelNumber++;
-				onExit(this);
-				onEnter(this);
+				if(Assets.getBitmapData(
+					Level.levelFilename(_levelNumber)) == null)
+				{
+					_levelNumber = 0;
+					SceneManager.get().goto("Title");
+				}
+				else
+				{
+					onExit(this);
+					onEnter(this);
+				}
 
 			case "lose":
 				onExit(this);

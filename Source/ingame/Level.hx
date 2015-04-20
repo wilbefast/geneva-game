@@ -52,6 +52,14 @@ class Level extends Sprite
 		}
 	}
 
+	public static function levelFilename(levelNumber : Int) : String
+	{
+		var levelNumberStr = Std.string(levelNumber + 1);
+		while(levelNumberStr.length < 2)
+			levelNumberStr = '0' + levelNumberStr;
+		return ("assets/level" + levelNumberStr + ".png");
+	}
+
 	public function new(levelNumber : Int)
 	{
 		super();
@@ -60,11 +68,8 @@ class Level extends Sprite
 		Circuits.get().reset();
 
 		// load image
-		var levelNumberStr = Std.string(levelNumber + 1);
-		while(levelNumberStr.length < 2)
-			levelNumberStr = '0' + levelNumberStr;
-		var bitmap = Assets.getBitmapData (
-			"assets/level" + levelNumberStr + ".png");
+		var levelNumberStr = levelFilename(levelNumber);
+		var bitmap = Assets.getBitmapData(levelNumberStr);
 		if(bitmap == null)
 			throw "No file exists for level '" + levelNumberStr + "'";
 
