@@ -144,8 +144,6 @@ class Level extends Sprite
 				function _addObject(obj : GameObject, tile : Tile) {
 					_gameObjects.push(obj);
 					_gameObjectsLayer.addChild(obj);
-					obj.x = tile.x;
-					obj.y = tile.y;
 					tile.putObject(obj);
 				}
 				switch(type)

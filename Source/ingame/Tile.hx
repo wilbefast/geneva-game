@@ -205,6 +205,15 @@ class Tile extends Sprite
 	{
 		var prevContents = _contents;
 		_contents = obj;
+		obj.x = x;
+		obj.y = y;
+		return prevContents;
+	}
+
+	public function pickObject() : GameObject
+	{
+		var prevContents = _contents;
+		_contents = null;
 		return prevContents;
 	}
 

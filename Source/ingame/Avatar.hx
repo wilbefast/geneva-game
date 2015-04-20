@@ -72,28 +72,28 @@ class Avatar extends GameObject
 
 		if(newTile == _tile.getNorth())
 		{	
-			if(newTile.getType() == Flooded)
+			if(newTile.moveCost() > 2)
 				_img.bitmapData = _img_n_flooded;
 			else	
 				_img.bitmapData = _img_n;
 		}
 		else if(newTile == _tile.getSouth())
 		{	
-			if(newTile.getType() == Flooded)
+			if(newTile.moveCost() > 2)
 				_img.bitmapData = _img_s_flooded;
 			else	
 				_img.bitmapData = _img_s;
 		}
 		else if(newTile == _tile.getEast())
 		{	
-			if(newTile.getType() == Flooded)
+			if(newTile.moveCost() > 2)
 				_img.bitmapData = _img_e_flooded;
 			else	
 				_img.bitmapData = _img_e;
 		}
 		else if(newTile == _tile.getWest())
 		{	
-			if(newTile.getType() == Flooded)
+			if(newTile.moveCost() > 2)
 				_img.bitmapData = _img_w_flooded;
 			else	
 				_img.bitmapData = _img_w;
@@ -190,6 +190,8 @@ class Avatar extends GameObject
 	// INTERACT
 	// --------------------------------------------------------------------------
 
+	private var _carriedObject : GameObject;
+
 	public function tryInteract() : Int
 	{
 		var cost = 1;
@@ -201,6 +203,20 @@ class Avatar extends GameObject
 				Circuits.get().switchCircuit(c);
 
 			case _:
+		}
+
+		// Nothing done yet
+		if(cost <= 1)
+		{
+			if(_carriedObject != null)
+			{
+				_carriedObject.alpha = 1;
+				_carriedObject = _tile.putObject(_carriedObject);
+			}
+			else
+				_carriedObject = _tile.pickObject();
+			if(_carriedObject != null)
+				_carriedObject.alpha = 0;
 		}
 
 		// Bounce
