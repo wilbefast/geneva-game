@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="Geneva" package="com.wilbefast.geneva" version="1.0.0" company="wilbefast" />
-	<app main="Main" path="Export" file="Geneva" />
+	<meta title="Chlorine Dawn" package="com.wilbefast.geneva" version="1.0.0" company="wilbefast" />
+	<app main="Main" path="Export" file="Chlorine Dawn" />
 	
 	<source path="Source" />
 	<source path="Source/utils" />

@@ -103,7 +103,9 @@ class Avatar extends GameObject
 			return 1;
 
 		var moveCost = newTile.moveCost() + _tile.moveCost();
-		
+		if(_carriedObject != null)
+			moveCost++;
+
 		var delay = moveCost*Level.STEP_DURATION;
 
 		_onStartEntering(newTile, delay);
@@ -212,11 +214,15 @@ class Avatar extends GameObject
 			{
 				_carriedObject.alpha = 1;
 				_carriedObject = _tile.putObject(_carriedObject);
+				cost = 2;
 			}
 			else
 				_carriedObject = _tile.pickObject();
 			if(_carriedObject != null)
+			{
 				_carriedObject.alpha = 0;
+				cost = 2;
+			}
 		}
 
 		// Bounce
