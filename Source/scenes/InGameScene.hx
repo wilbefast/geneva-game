@@ -23,6 +23,12 @@ class InGameScene extends Scene
 
 	public override function onEnter(source : Scene) : Void
 	{
+		// Add background
+		var background = new Bitmap(
+			Assets.getBitmapData("assets/background.png"),
+			PixelSnapping.ALWAYS);
+		addChild(background);
+		
 		// Load level
 		_level = new Level(_levelNumber);
 		addChild(_level);
